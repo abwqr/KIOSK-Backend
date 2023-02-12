@@ -22,26 +22,25 @@ date (upload, due)
 bids
 cities
 """
+
 class Project(models.Model):
-
-    TYPE_HANDYMAN = 0
-    TYPE_PRO = 1
-    TYPE_CHOICES = [(TYPE_PRO, 'professional'), (TYPE_HANDYMAN, 'handyman')]
-
-    STATUS_AVAILABLE = 0
-    STATUS_ONGOING = 1
-    STATUS_COMPLETE = 2
-    STATUS_CHOICES = [(STATUS_AVAILABLE, 'available'), (STATUS_ONGOING, 'ongoing'), (STATUS_COMPLETE, 'complete')]
-
-
+    TYPE_CHOICES = (('PROFESSIONAL', 'PROFESSIONAL'), ('HANDYMAN', 'HANDYMAN'))
+    STATUS_CHOICES = (('available', 'available'), ('ongoing', 'ongoing'), ('complete', 'complete'))
 
     employer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='uploaded_project', default="")
     employee = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='working_on')
     project_title = models.CharField(max_length=120)
-    project_type = models.IntegerField(choices=TYPE_CHOICES)
+    project_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     description = models.TextField()
     budget = models.PositiveIntegerField()
-    status = models.IntegerField(choices=STATUS_CHOICES)
-    country = CountryField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
+    country = models.CharField(max_length=200, null = True)
+    city = models.CharField(max_length=200, null = True)
+
+class Project_Skill(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='skill', default='')
+    skill_name = models.CharField(max_length=30, default="", null=True)
+
+
 
 
